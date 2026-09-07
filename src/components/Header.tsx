@@ -1,9 +1,10 @@
 import { BrandMark } from "./BrandMark";
+import { WeaveBand } from "./MelanesianMotifs";
 import { source } from "../data/survey";
 
 export function Header() {
   return (
-    <header className="border-b border-line/80">
+    <header>
       <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-5 py-6 sm:px-8 lg:flex-row lg:items-end lg:justify-between">
         <div className="flex items-start gap-4">
           <BrandMark size="md" />
@@ -25,6 +26,7 @@ export function Header() {
           </p>
         </div>
       </div>
+      <WeaveBand tone="muted" className="h-4" />
     </header>
   );
 }

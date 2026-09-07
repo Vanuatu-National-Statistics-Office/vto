@@ -1,4 +1,5 @@
 import { BrandMark } from "./BrandMark";
+import { WeaveBand } from "./MelanesianMotifs";
 import type { ReportPage } from "../data/survey";
 
 const items: { id: ReportPage; label: string; no: string }[] = [
@@ -15,7 +16,7 @@ type Props = {
 
 export function PageNav({ page, onPage }: Props) {
   return (
-    <nav className="sticky top-0 z-20 border-b border-line/80 bg-paper/90 backdrop-blur-md">
+    <nav className="sticky top-0 z-20 bg-paper/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4 px-5 py-3 sm:px-8">
         <button
           type="button"
@@ -63,6 +64,7 @@ export function PageNav({ page, onPage }: Props) {
           })}
         </div>
       </div>
+      <WeaveBand tone="muted" className="h-4" />
     </nav>
   );
 }

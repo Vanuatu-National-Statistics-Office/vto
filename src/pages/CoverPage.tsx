@@ -1,14 +1,12 @@
 import { BrandMark } from "../components/BrandMark";
-import { airports, source, type ReportPage } from "../data/survey";
+import { PatternWash, WeaveBand } from "../components/MelanesianMotifs";
+import { source, type ReportPage } from "../data/survey";
 
 type Props = {
   onPage: (page: ReportPage) => void;
 };
 
 export function CoverPage({ onPage }: Props) {
-  const vli = airports.vli;
-  const son = airports.son;
-
   return (
     <div className="mx-auto flex min-h-[calc(100vh-4.25rem)] max-w-[1440px] flex-col px-5 py-6 sm:px-8 sm:py-8">
       <section className="relative flex flex-1 flex-col overflow-hidden rounded-[1.75rem] bg-ink text-paper">
@@ -19,9 +17,18 @@ export function CoverPage({ onPage }: Props) {
               "radial-gradient(ellipse 55% 80% at 0% 100%, #00A3BE 0%, transparent 58%), radial-gradient(ellipse 55% 80% at 100% 100%, #6FBE3A 0%, transparent 58%)",
           }}
         />
+        <PatternWash variant="cover" />
+        <div className="relative">
+          <WeaveBand tone="paper" className="h-6 opacity-80" />
+        </div>
         <div className="relative flex flex-1 flex-col justify-between gap-10 p-6 sm:p-10 lg:p-14">
           <div className="flex items-start justify-between gap-4">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <img
+              src={`${import.meta.env.BASE_URL}coat-of-arms.png`}
+              alt="Republic of Vanuatu coat of arms"
+              className="h-24 w-auto object-contain sm:h-32"
+            />
+            <div className="flex flex-col items-end gap-2">
               <BrandMark size="lg" plate />
               <p className="text-sm text-paper/70">Airport consent surveys</p>
             </div>
@@ -40,51 +47,7 @@ export function CoverPage({ onPage }: Props) {
             </p>
           </div>
 
-          <div className="grid gap-4 lg:grid-cols-2">
-            <button
-              type="button"
-              onClick={() => onPage("vli")}
-              className="rounded-2xl bg-vli-deep/90 p-6 text-left transition-transform hover:-translate-y-0.5"
-            >
-              <p className="text-[11px] font-semibold tracking-[0.18em] text-sand uppercase">
-                02 · {vli.iata} · {vli.airport}
-              </p>
-              <h2 className="font-display mt-2 text-3xl font-semibold">
-                {vli.name}
-              </h2>
-              <p className="mt-2 max-w-md text-sm leading-relaxed text-paper/75">
-                Holiday-led, premium spend, 7-night stays.
-              </p>
-              <dl className="mt-6 grid grid-cols-3 gap-3 text-sm">
-                <Stat label="Recommend" value={`${vli.recommend}%`} />
-                <Stat label="Holiday" value="89%" />
-                <Stat label="Australia" value="70%" />
-              </dl>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => onPage("son")}
-              className="rounded-2xl bg-son-deep/90 p-6 text-left transition-transform hover:-translate-y-0.5"
-            >
-              <p className="text-[11px] font-semibold tracking-[0.18em] text-sand uppercase">
-                03 · {son.iata} · {son.airport}
-              </p>
-              <h2 className="font-display mt-2 text-3xl font-semibold">
-                {son.name}
-              </h2>
-              <p className="mt-2 max-w-md text-sm leading-relaxed text-paper/75">
-                Stronger VFR mix, Brisbane twice weekly, 7–8 nights.
-              </p>
-              <dl className="mt-6 grid grid-cols-3 gap-3 text-sm">
-                <Stat label="Recommend" value={`${son.recommend}%`} />
-                <Stat label="VFR" value="24%" />
-                <Stat label="Australia" value="73%" />
-              </dl>
-            </button>
-          </div>
-
-          <div className="flex flex-col gap-3 border-t border-paper/15 pt-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-3 pt-5 sm:flex-row sm:items-center sm:justify-between">
             <p className="max-w-xl text-xs leading-relaxed text-paper/55">
               {source}
             </p>
@@ -97,16 +60,10 @@ export function CoverPage({ onPage }: Props) {
             </button>
           </div>
         </div>
+        <div className="relative">
+          <WeaveBand tone="paper" className="h-6 opacity-80" />
+        </div>
       </section>
-    </div>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <dt className="text-[11px] tracking-wide text-paper/55 uppercase">{label}</dt>
-      <dd className="font-display mt-1 text-2xl font-semibold">{value}</dd>
     </div>
   );
 }

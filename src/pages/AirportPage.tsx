@@ -15,6 +15,7 @@ import {
   type AirportId,
   type ReportPage,
 } from "../data/survey";
+import { PatternWash, WeaveBand } from "../components/MelanesianMotifs";
 import { airportHex, originColors } from "../theme";
 
 const icons = {
@@ -55,30 +56,36 @@ export function AirportPage({ id, onPage }: Props) {
   return (
     <div className="mx-auto max-w-[1440px] px-5 py-6 sm:px-8 sm:py-8">
       <header
-        className={`rounded-[1.75rem] px-6 py-8 text-paper sm:px-10 sm:py-10 ${
+        className={`relative overflow-hidden rounded-[1.75rem] pt-8 text-paper sm:pt-10 ${
           isVli ? "bg-vli-deep" : "bg-son-deep"
         }`}
       >
-        <p className="text-[11px] font-semibold tracking-[0.2em] text-sand uppercase">
-          {isVli ? "02" : "03"} · {airport.iata} · {airport.airport} · {page.island}
-        </p>
-        <div className="mt-3 grid gap-8 lg:grid-cols-[1.4fr_0.8fr] lg:items-end">
-          <div>
-            <h1 className="font-display text-4xl leading-[1.05] font-semibold sm:text-5xl">
-              {airport.name}
-            </h1>
-            <p className="font-display mt-2 text-2xl text-sand italic">
-              {page.headline}
-            </p>
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-paper/80">
-              {page.deck}
-            </p>
+        <PatternWash variant="cover" />
+        <div className="relative px-6 sm:px-10">
+          <p className="text-[11px] font-semibold tracking-[0.2em] text-sand uppercase">
+            {isVli ? "02" : "03"} · {airport.iata} · {airport.airport} · {page.island}
+          </p>
+          <div className="mt-3 grid gap-8 lg:grid-cols-[1.4fr_0.8fr] lg:items-end">
+            <div>
+              <h1 className="font-display text-4xl leading-[1.05] font-semibold sm:text-5xl">
+                {airport.name}
+              </h1>
+              <p className="font-display mt-2 text-2xl text-sand italic">
+                {page.headline}
+              </p>
+              <p className="mt-4 max-w-2xl text-base leading-relaxed text-paper/80">
+                {page.deck}
+              </p>
+            </div>
+            <dl className="grid grid-cols-3 gap-4">
+              <HeroStat label="Recommend" value={`${airport.recommend}%`} />
+              <HeroStat label="Stay" value={airport.stay} />
+              <HeroStat label="Australia" value={`${airport.origins[0].pct}%`} />
+            </dl>
           </div>
-          <dl className="grid grid-cols-3 gap-4">
-            <HeroStat label="Recommend" value={`${airport.recommend}%`} />
-            <HeroStat label="Stay" value={airport.stay} />
-            <HeroStat label="Australia" value={`${airport.origins[0].pct}%`} />
-          </dl>
+        </div>
+        <div className="relative mt-8">
+          <WeaveBand tone="paper" className="h-5" />
         </div>
       </header>
 
