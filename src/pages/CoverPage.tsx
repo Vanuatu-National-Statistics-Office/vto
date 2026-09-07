@@ -1,5 +1,5 @@
 import { BrandMark } from "../components/BrandMark";
-import { PatternWash, WeaveBand } from "../components/MelanesianMotifs";
+import { WeaveBand } from "../components/MelanesianMotifs";
 import { source, type ReportPage } from "../data/survey";
 
 type Props = {
@@ -17,7 +17,23 @@ export function CoverPage({ onPage }: Props) {
               "radial-gradient(ellipse 55% 80% at 0% 100%, #00A3BE 0%, transparent 58%), radial-gradient(ellipse 55% 80% at 100% 100%, #6FBE3A 0%, transparent 58%)",
           }}
         />
-        <PatternWash variant="cover" />
+        <div className="pointer-events-none absolute inset-0" aria-hidden>
+          <img
+            src={`${import.meta.env.BASE_URL}sandroing.png`}
+            alt=""
+            className="absolute top-1/2 left-1/2 h-[92%] w-[92%] max-w-none -translate-x-1/2 -translate-y-1/2 object-contain opacity-[0.22] mix-blend-soft-light"
+          />
+          <img
+            src={`${import.meta.env.BASE_URL}sandroing.png`}
+            alt=""
+            className="absolute -top-10 -right-6 h-[20rem] w-[20rem] object-contain opacity-[0.18] mix-blend-soft-light"
+          />
+          <img
+            src={`${import.meta.env.BASE_URL}sandroing.png`}
+            alt=""
+            className="absolute -bottom-12 -left-10 h-[16rem] w-[16rem] rotate-180 object-contain opacity-[0.16] mix-blend-soft-light"
+          />
+        </div>
         <div className="relative">
           <WeaveBand tone="paper" className="h-6 opacity-80" />
         </div>
