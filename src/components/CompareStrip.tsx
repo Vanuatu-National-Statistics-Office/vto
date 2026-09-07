@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import {
   Bar,
   BarChart,
@@ -9,6 +10,7 @@ import {
 } from "recharts";
 import { airports, spendBandsNormalized } from "../data/survey";
 import { brand } from "../theme";
+import { CountPct } from "./AnimatedViz";
 
 export function CompareStrip() {
   const vli = airports.vli;
@@ -19,28 +21,36 @@ export function CompareStrip() {
       <div className="card grid grid-cols-2 gap-4 p-5 xl:grid-cols-4">
         <Kpi
           label="Recommend · VLI"
-          value={`${vli.recommend}%`}
           note="Port Vila advocacy"
           tone="vli"
-        />
+        >
+          <CountPct value={vli.recommend} />
+        </Kpi>
         <Kpi
           label="Recommend · SON"
-          value={`${son.recommend}%`}
           note="Santo advocacy"
           tone="son"
-        />
+        >
+          <CountPct value={son.recommend} />
+        </Kpi>
         <Kpi
           label="Holiday share"
-          value="89% vs 54%"
           note="Port Vila is the leisure gateway"
           tone="neutral"
-        />
+        >
+          <CountPct value={89} />
+          <span className="text-ink-soft"> vs </span>
+          <CountPct value={54} />
+        </Kpi>
         <Kpi
           label="VFR share"
-          value="5% vs 24%"
           note="Santo’s visiting-friends mix"
           tone="neutral"
-        />
+        >
+          <CountPct value={5} />
+          <span className="text-ink-soft"> vs </span>
+          <CountPct value={24} />
+        </Kpi>
       </div>
 
       <div className="card p-5">
@@ -94,8 +104,22 @@ export function CompareStrip() {
                   fontSize: 12,
                 }}
               />
-              <Bar dataKey="vli" fill={brand.teal} radius={[4, 4, 0, 0]} />
-              <Bar dataKey="son" fill={brand.lime} radius={[4, 4, 0, 0]} />
+              <Bar
+                dataKey="vli"
+                fill={brand.teal}
+                radius={[4, 4, 0, 0]}
+                isAnimationActive
+                animationDuration={1400}
+                animationEasing="ease-out"
+              />
+              <Bar
+                dataKey="son"
+                fill={brand.lime}
+                radius={[4, 4, 0, 0]}
+                isAnimationActive
+                animationDuration={980}
+                animationEasing="ease-out"
+              />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -106,14 +130,14 @@ export function CompareStrip() {
 
 function Kpi({
   label,
-  value,
   note,
   tone,
+  children,
 }: {
   label: string;
-  value: string;
   note: string;
   tone: "vli" | "son" | "neutral";
+  children: ReactNode;
 }) {
   const color =
     tone === "vli" ? "text-vli" : tone === "son" ? "text-son" : "text-ink";
@@ -123,7 +147,7 @@ function Kpi({
         {label}
       </p>
       <p className={`font-display mt-1 text-[1.65rem] leading-none font-semibold ${color}`}>
-        {value}
+        {children}
       </p>
       <p className="mt-2 text-xs leading-relaxed text-ink-soft">{note}</p>
     </div>

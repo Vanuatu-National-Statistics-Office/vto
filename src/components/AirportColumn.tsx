@@ -10,8 +10,9 @@ import {
   Users,
   Wifi,
 } from "lucide-react";
-import type { AirportId, AirportProfile, OriginSlice } from "../data/survey";
+import type { AirportId, AirportProfile } from "../data/survey";
 import { airportHex, originColors } from "../theme";
+import { CountPct, FillRing, GrowBar, OriginDonut } from "./AnimatedViz";
 
 const icons = {
   Holiday: Palmtree,
@@ -47,45 +48,6 @@ function theme(id: AirportId) {
         bar: "bg-son",
         hex: airportHex.son,
       };
-}
-
-function ringStyle(pct: number, color: string) {
-  return {
-    background: `conic-gradient(${color} ${pct * 3.6}deg, #dce8ea 0deg)`,
-  } as const;
-}
-
-function OriginDonut({
-  slices,
-  colors,
-}: {
-  slices: OriginSlice[];
-  colors: string[];
-}) {
-  let acc = 0;
-  const stops = slices.map((slice, i) => {
-    const start = acc;
-    acc += slice.pct;
-    return `${colors[i]} ${start}% ${acc}%`;
-  });
-  const lead = slices[0];
-
-  return (
-    <div
-      className="grid h-[124px] w-[124px] place-items-center rounded-full"
-      style={{ background: `conic-gradient(${stops.join(", ")})` }}
-      aria-hidden
-    >
-      <div className="flex h-[78px] w-[78px] flex-col items-center justify-center rounded-full bg-white">
-        <span className="font-display text-2xl leading-none font-semibold">
-          {lead.pct}%
-        </span>
-        <span className="mt-0.5 text-[10px] tracking-wide text-ink-soft uppercase">
-          Aus
-        </span>
-      </div>
-    </div>
-  );
 }
 
 function CardShell({
@@ -149,9 +111,10 @@ export function AirportColumn({ airport, focus }: Props) {
                   />
                   {origin.name}
                 </span>
-                <span className="font-display text-lg font-semibold">
-                  {origin.pct}%
-                </span>
+                <CountPct
+                  value={origin.pct}
+                  className="font-display text-lg font-semibold"
+                />
               </li>
             ))}
           </ul>
@@ -173,14 +136,9 @@ export function AirportColumn({ airport, focus }: Props) {
                     <Icon className={`h-4 w-4 ${t.mid}`} />
                     {item.name}
                   </span>
-                  <span className="font-semibold">{item.pct}%</span>
+                  <CountPct value={item.pct} className="font-semibold" />
                 </div>
-                <div className="h-2 overflow-hidden rounded-full bg-paper-2">
-                  <div
-                    className={`h-full rounded-full ${t.bar}`}
-                    style={{ width: `${item.pct}%` }}
-                  />
-                </div>
+                <GrowBar pct={item.pct} className={t.bar} />
               </li>
             );
           })}
@@ -197,16 +155,7 @@ export function AirportColumn({ airport, focus }: Props) {
             const Icon = icons[item.name as keyof typeof icons] ?? ShieldCheck;
             return (
               <div key={item.name} className="text-center">
-                <div
-                  className="mx-auto grid h-[76px] w-[76px] place-items-center rounded-full"
-                  style={ringStyle(item.pct, t.hex)}
-                >
-                  <div className="grid h-[56px] w-[56px] place-items-center rounded-full bg-white">
-                    <span className="font-display text-lg font-semibold leading-none">
-                      {item.pct}
-                    </span>
-                  </div>
-                </div>
+                <FillRing pct={item.pct} color={t.hex} />
                 <p className="mt-2 flex items-center justify-center gap-1 text-xs text-ink-soft">
                   <Icon className="h-3.5 w-3.5" />
                   {item.name}
@@ -232,9 +181,10 @@ export function AirportColumn({ airport, focus }: Props) {
                   className="rounded-xl border border-coral/25 bg-coral/8 px-3 py-3"
                 >
                   <Icon className="h-4 w-4 text-coral" />
-                  <p className="font-display mt-2 text-2xl font-semibold">
-                    {item.pct}%
-                  </p>
+                  <CountPct
+                    value={item.pct}
+                    className="font-display mt-2 block text-2xl font-semibold"
+                  />
                   <p className="text-sm text-ink-soft">{item.name}</p>
                 </div>
               );
@@ -252,13 +202,11 @@ export function AirportColumn({ airport, focus }: Props) {
           {airport.spend.map((band) => (
             <li key={band.label} className="grid grid-cols-[7.5rem_1fr_2.4rem] items-center gap-2">
               <span className="text-xs text-ink-soft">{band.label}</span>
-              <div className="h-2.5 overflow-hidden rounded-full bg-paper-2">
-                <div
-                  className={`h-full rounded-full ${t.bar}`}
-                  style={{ width: `${(band.pct / 30) * 100}%` }}
-                />
-              </div>
-              <span className="text-right text-sm font-semibold">{band.pct}%</span>
+              <GrowBar pct={band.pct} max={30} height="h-2.5" className={t.bar} />
+              <CountPct
+                value={band.pct}
+                className="text-right text-sm font-semibold"
+              />
             </li>
           ))}
         </ul>
@@ -280,9 +228,10 @@ export function AirportColumn({ airport, focus }: Props) {
           <h3 className="text-[11px] font-semibold tracking-[0.16em] text-sand uppercase">
             Would recommend
           </h3>
-          <p className="font-display mt-2 text-4xl font-semibold">
-            {airport.recommend}%
-          </p>
+          <CountPct
+            value={airport.recommend}
+            className="font-display mt-2 block text-4xl font-semibold"
+          />
           <p className="mt-1 text-sm text-paper/75">
             {airport.recommend === 100 ? "Every Santo respondent" : "Near-universal advocacy"}
           </p>

@@ -22,14 +22,14 @@ export function CoverPage({ onPage }: Props) {
           <WeaveBand tone="paper" className="h-6 opacity-80" />
         </div>
         <div className="relative flex flex-1 flex-col justify-between gap-10 p-6 sm:p-10 lg:p-14">
-          <div className="flex items-start justify-between gap-4">
+          <div className="flex items-start justify-between gap-4 py-2">
             <img
               src={`${import.meta.env.BASE_URL}coat-of-arms.png`}
               alt="Republic of Vanuatu coat of arms"
-              className="h-24 w-auto object-contain sm:h-32"
+              className="logo-zoom h-24 w-auto object-contain sm:h-32"
             />
             <div className="flex flex-col items-end gap-2">
-              <BrandMark size="lg" plate />
+              <BrandMark size="lg" plate pulse />
               <p className="text-sm text-paper/70">Airport consent surveys</p>
             </div>
           </div>

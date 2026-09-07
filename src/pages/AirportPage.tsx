@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import {
   BedDouble,
   Briefcase,
@@ -15,6 +16,12 @@ import {
   type AirportId,
   type ReportPage,
 } from "../data/survey";
+import {
+  CountPct,
+  FillRing,
+  GrowBar,
+  OriginDonut,
+} from "../components/AnimatedViz";
 import { PatternWash, WeaveBand } from "../components/MelanesianMotifs";
 import { airportHex, originColors } from "../theme";
 
@@ -46,13 +53,6 @@ export function AirportPage({ id, onPage }: Props) {
   const prev: ReportPage = isVli ? "cover" : "vli";
   const prevLabel = isVli ? "Back: Cover" : "Back: Port Vila";
 
-  let originAcc = 0;
-  const originStops = airport.origins.map((slice, i) => {
-    const start = originAcc;
-    originAcc += slice.pct;
-    return `${originColors[id][i]} ${start}% ${originAcc}%`;
-  });
-
   return (
     <div className="mx-auto max-w-[1440px] px-5 py-6 sm:px-8 sm:py-8">
       <header
@@ -78,9 +78,19 @@ export function AirportPage({ id, onPage }: Props) {
               </p>
             </div>
             <dl className="grid grid-cols-3 gap-4">
-              <HeroStat label="Recommend" value={`${airport.recommend}%`} />
+              <HeroStat label="Recommend">
+                <CountPct
+                  value={airport.recommend}
+                  className="font-display text-2xl font-semibold sm:text-3xl"
+                />
+              </HeroStat>
               <HeroStat label="Stay" value={airport.stay} />
-              <HeroStat label="Australia" value={`${airport.origins[0].pct}%`} />
+              <HeroStat label="Australia">
+                <CountPct
+                  value={airport.origins[0].pct}
+                  className="font-display text-2xl font-semibold sm:text-3xl"
+                />
+              </HeroStat>
             </dl>
           </div>
         </div>
@@ -117,20 +127,12 @@ export function AirportPage({ id, onPage }: Props) {
             Visitor origins
           </h2>
           <div className="mt-5 flex items-center gap-5">
-            <div
-              className="grid h-[132px] w-[132px] shrink-0 place-items-center rounded-full"
-              style={{ background: `conic-gradient(${originStops.join(", ")})` }}
-              aria-hidden
-            >
-              <div className="flex h-[84px] w-[84px] flex-col items-center justify-center rounded-full bg-white">
-                <span className="font-display text-2xl leading-none font-semibold">
-                  {airport.origins[0].pct}%
-                </span>
-                <span className="mt-0.5 text-[10px] tracking-wide text-ink-soft uppercase">
-                  Aus
-                </span>
-              </div>
-            </div>
+            <OriginDonut
+              slices={airport.origins}
+              colors={originColors[id]}
+              size={132}
+              inner={84}
+            />
             <ul className="w-full space-y-2.5">
               {airport.origins.map((origin, i) => (
                 <li key={origin.name} className="flex items-center justify-between gap-3">
@@ -141,9 +143,10 @@ export function AirportPage({ id, onPage }: Props) {
                     />
                     {origin.name}
                   </span>
-                  <span className="font-display text-lg font-semibold">
-                    {origin.pct}%
-                  </span>
+                  <CountPct
+                    value={origin.pct}
+                    className="font-display text-lg font-semibold"
+                  />
                 </li>
               ))}
             </ul>
@@ -169,14 +172,12 @@ export function AirportPage({ id, onPage }: Props) {
                       <Icon className={isVli ? "h-4 w-4 text-vli" : "h-4 w-4 text-son"} />
                       {item.name}
                     </span>
-                    <span className="font-semibold">{item.pct}%</span>
+                    <CountPct value={item.pct} className="font-semibold" />
                   </div>
-                  <div className="h-2 overflow-hidden rounded-full bg-paper-2">
-                    <div
-                      className={`h-full rounded-full ${isVli ? "bg-vli" : "bg-son"}`}
-                      style={{ width: `${item.pct}%` }}
-                    />
-                  </div>
+                  <GrowBar
+                    pct={item.pct}
+                    className={isVli ? "bg-vli" : "bg-son"}
+                  />
                 </li>
               );
             })}
@@ -195,18 +196,7 @@ export function AirportPage({ id, onPage }: Props) {
               const Icon = icons[item.name as keyof typeof icons] ?? ShieldCheck;
               return (
                 <div key={item.name} className="text-center">
-                  <div
-                    className="mx-auto grid h-[84px] w-[84px] place-items-center rounded-full"
-                    style={{
-                      background: `conic-gradient(${hex} ${item.pct * 3.6}deg, #dce8ea 0deg)`,
-                    }}
-                  >
-                    <div className="grid h-[62px] w-[62px] place-items-center rounded-full bg-white">
-                      <span className="font-display text-xl font-semibold leading-none">
-                        {item.pct}
-                      </span>
-                    </div>
-                  </div>
+                  <FillRing pct={item.pct} color={hex} size={84} inner={62} />
                   <p className="mt-2 flex items-center justify-center gap-1 text-xs text-ink-soft">
                     <Icon className="h-3.5 w-3.5" />
                     {item.name}
@@ -225,9 +215,10 @@ export function AirportPage({ id, onPage }: Props) {
                     className="rounded-xl border border-coral/25 bg-coral/8 px-3 py-3"
                   >
                     <Icon className="h-4 w-4 text-coral" />
-                    <p className="font-display mt-2 text-2xl font-semibold">
-                      {item.pct}%
-                    </p>
+                    <CountPct
+                      value={item.pct}
+                      className="font-display mt-2 block text-2xl font-semibold"
+                    />
                     <p className="text-sm text-ink-soft">Need work · {item.name}</p>
                   </div>
                 );
@@ -258,11 +249,16 @@ export function AirportPage({ id, onPage }: Props) {
           {airport.spend.map((band) => (
             <li key={band.label} className="rounded-2xl bg-paper-2/70 p-4">
               <p className="text-xs text-ink-soft">{band.label}</p>
-              <p className="font-display mt-2 text-3xl font-semibold">{band.pct}%</p>
-              <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-paper">
-                <div
-                  className={`h-full rounded-full ${isVli ? "bg-vli" : "bg-son"}`}
-                  style={{ width: `${(band.pct / 30) * 100}%` }}
+              <CountPct
+                value={band.pct}
+                className="font-display mt-2 block text-3xl font-semibold"
+              />
+              <div className="mt-3">
+                <GrowBar
+                  pct={band.pct}
+                  max={30}
+                  height="h-1.5"
+                  className={isVli ? "bg-vli" : "bg-son"}
                 />
               </div>
             </li>
@@ -292,11 +288,21 @@ export function AirportPage({ id, onPage }: Props) {
   );
 }
 
-function HeroStat({ label, value }: { label: string; value: string }) {
+function HeroStat({
+  label,
+  value,
+  children,
+}: {
+  label: string;
+  value?: string;
+  children?: ReactNode;
+}) {
   return (
     <div>
       <dt className="text-[11px] tracking-wide text-paper/55 uppercase">{label}</dt>
-      <dd className="font-display mt-1 text-2xl font-semibold sm:text-3xl">{value}</dd>
+      <dd className="font-display mt-1 text-2xl font-semibold sm:text-3xl">
+        {children ?? value}
+      </dd>
     </div>
   );
 }

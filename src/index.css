@@ -68,3 +68,34 @@ body {
 .recharts-tooltip-wrapper {
   outline: none;
 }
+
+@keyframes logo-zoom {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+.logo-zoom {
+  animation: logo-zoom 3.2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.logo-zoom-delay {
+  animation-delay: 1.1s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-zoom,
+  .logo-zoom-delay {
+    animation: none;
+  }
+
+  .grow-bar,
+  .card * {
+    transition-duration: 0.01ms !important;
+  }
+}
